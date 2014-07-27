@@ -1,0 +1,12 @@
+onejar: WebSitePoller
+main: org.litesoft.websitepoller.WebSitePoller
+
+dependencies:
+- ../LiteSoftServerUtils
+
+resources: 
+- LICENSE
+
+classpath:
+- ../LiteSoftServerUtils/libs|servlet*.jar
+
