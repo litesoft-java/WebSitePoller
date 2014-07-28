@@ -8,32 +8,26 @@ import java.util.List;
 
 public class PointGenerator {
     private final List<Integer> mDataY;
-    private Integer mMaxY;
-    private int mHeight;
 
-    public PointGenerator( List<Integer> pDataY, int pHeight ) {
-        mMaxY = Lists.max( mDataY = Confirm.isNotNull( "DataY", pDataY ) );
-        mHeight = pHeight;
+    public PointGenerator( List<Integer> pDataY ) {
+        mDataY = Confirm.isNotNull( "DataY", pDataY );
     }
 
-    public Point[] generate() {
-        if ( mMaxY == null ) {
+    public Point[] generate( int pHeight ) {
+        Integer zMaxY = Lists.max( mDataY );
+        if ( zMaxY == null ) {
             return new Point[0];
         }
+        double zFactor = (double) pHeight / zMaxY;
         Point[] zPoints = new Point[mDataY.size()];
-        for ( int i = 0; i < zPoints.length; i++ ) {
-            zPoints[i] = calcPoint( i, mDataY.get( i ) );
+        for ( int x = 0; x < zPoints.length; x++ ) {
+            zPoints[x] = new Point( x, scaleY( mDataY.get( x ), zFactor ) );
         }
         return zPoints;
     }
 
-    private Point calcPoint( int x, int y ) {
-        return new Point( x, scaleY( y ) );
-    }
-
-    private int scaleY( int y ) {
-        double zFactor = (double) mHeight / mMaxY;
-        double zScaled = zFactor * y;
+    private int scaleY( int y, double pFactor ) {
+        double zScaled = pFactor * y;
         return (int) zScaled;
     }
 }

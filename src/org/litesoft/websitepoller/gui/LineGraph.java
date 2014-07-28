@@ -1,6 +1,6 @@
 package org.litesoft.websitepoller.gui;
 
-import org.litesoft.commonfoundation.typeutils.*;
+import org.litesoft.commonfoundation.base.*;
 
 import java.awt.*;
 import java.util.List;
@@ -11,15 +11,12 @@ public class LineGraph {
     private static final int SCALE_Y = 4;
     private static final Stroke STROKE = new BasicStroke( LINE_THICKNESS );
 
-    private final List<Integer> mDataY = Lists.newArrayList();
+    private final List<Integer> mDataY;
     private final Color mColor;
 
-    public LineGraph( Color pColor ) {
-        mColor = pColor;
-    }
-
-    public void addDataPoint( int pDataY ) {
-        mDataY.add( pDataY );
+    public LineGraph( List<Integer> pDataY, Color pColor ) {
+        mDataY = Confirm.isNotNull( "DataY", pDataY );
+        mColor = Confirm.isNotNull( "Color", pColor );
     }
 
     public void render( Graphics2D g, Point pLeftTop, Dimension pSize ) {
@@ -31,7 +28,7 @@ public class LineGraph {
 
         zWidth = Math.min( zWidth, mDataY.size() );
 
-        Point[] zPoints = new PointGenerator( mDataY.subList( mDataY.size() - zWidth, mDataY.size() ), zHeight ).generate();
+        Point[] zPoints = new PointGenerator( mDataY.subList( mDataY.size() - zWidth, mDataY.size() ) ).generate( zHeight );
         if ( zPoints.length == 0 ) {
             return;
         }
