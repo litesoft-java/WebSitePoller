@@ -37,7 +37,7 @@ public class GUI extends JFrame implements StartableSourceTarget {
                 getContentPane().add( createGUI() );
 
                 //Display the window.
-                pack();
+//                pack();
                 setVisible( true );
             }
         } );

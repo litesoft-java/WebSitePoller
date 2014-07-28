@@ -69,6 +69,7 @@ public class WebSitePoller {
             JFrame.setDefaultLookAndFeelDecorated( true );
 
             GUI zFrame = new GUI( pName, mFactory, pSources );
+            zFrame.setSize( 1010, 600 );
             zFrame.setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE );
             return zFrame;
         }

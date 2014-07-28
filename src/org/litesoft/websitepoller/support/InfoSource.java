@@ -1,21 +1,23 @@
 package org.litesoft.websitepoller.support;
 
+import org.litesoft.commonfoundation.base.*;
+
 public class InfoSource {
-    private final int mID;
+    private final String mID;
     private final Integer mPollDurationMillisecs;
     private final String mMessage;
 
-    public InfoSource( int pID, Integer pPollDurationMillisecs, String pMessage ) {
+    public InfoSource( String pID, Integer pPollDurationMillisecs, String pMessage ) {
         mID = pID;
         mPollDurationMillisecs = pPollDurationMillisecs;
         mMessage = pMessage;
     }
 
-    public InfoSource( int pID ) {
+    public InfoSource( String pID ) {
         this( pID, null, null );
     }
 
-    public int getID() {
+    public String getID() {
         return mID;
     }
 
@@ -29,7 +31,7 @@ public class InfoSource {
 
     @Override
     public int hashCode() {
-        return mID;
+        return mID.hashCode();
     }
 
     @Override
@@ -39,6 +41,6 @@ public class InfoSource {
 
     public boolean equals( InfoSource them ) {
         return (this == them) || ((them != null)
-                                  && (this.mID == them.mID));
+                                  && Currently.areEqual( this.mID, them.mID));
     }
 }

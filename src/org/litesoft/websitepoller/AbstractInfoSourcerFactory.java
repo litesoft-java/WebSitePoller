@@ -27,17 +27,23 @@ public abstract class AbstractInfoSourcerFactory implements InfoSourcerFactory {
     }
 
     protected static class Data {
-        private final int mID;
+        private final int mSequenceNumber;
+        private final String mID;
         private final int mPollingFrequency;
         private final String mURL;
 
-        private Data( int pID, int pPollingFrequency, String pURL ) {
+        private Data( int pSequenceNumber, String pID, int pPollingFrequency, String pURL ) {
+            mSequenceNumber = pSequenceNumber;
             mID = pID;
             mPollingFrequency = Integers.assertAtLeast( "PollingFrequency", pPollingFrequency, 10 );
             mURL = Confirm.significant( "URL", pURL );
         }
 
-        public int getID() {
+        public int getSequenceNumber() {
+            return mSequenceNumber;
+        }
+
+        public String getID() {
             return mID;
         }
 
@@ -50,7 +56,7 @@ public abstract class AbstractInfoSourcerFactory implements InfoSourcerFactory {
         }
     }
 
-    protected static Data parse( int pID, String pConfigLine ) {
+    protected static Data parse( int pLineNumber, String pConfigLine ) {
         if ( null == (pConfigLine = ConstrainTo.significantOrNull( pConfigLine )) ) {
             return null;
         }
@@ -59,13 +65,36 @@ public abstract class AbstractInfoSourcerFactory implements InfoSourcerFactory {
             String[] zFields = PARSER.decode( pConfigLine );
             if ( zFields.length == 2 ) {
                 int zPollingFrequency = Integer.parseInt( Confirm.significant( "PollingFrequency", zFields[0] ) );
-                return new Data( pID, zPollingFrequency, zFields[1] );
+                return new Data( pLineNumber, createID( pLineNumber, zFields[1] ), zPollingFrequency, zFields[1] );
             }
         }
         catch ( RuntimeException e ) {
             zException = e;
         }
-        throw new IllegalArgumentException( "Expected two CSV fields (PollingFrequency & URL) from line (" + pID + "): " + pConfigLine, zException );
+        throw new IllegalArgumentException( "Expected two CSV fields (PollingFrequency & URL) from line (" + pLineNumber + "): " + pConfigLine, zException );
+    }
+
+    private static String createID( int pLineNumber, String pURL ) {
+        String zID = Integers.padIt( 2, pLineNumber );
+        return zID + " (" + extractInfo( pURL ) + ")";
+    }
+
+    private static String extractInfo( String pURL ) {
+        int zAt = pURL.indexOf( "://" );
+        if ( zAt != -1 ) {
+            pURL = pURL.substring( zAt + 3 );
+            if ( -1 != (zAt = pURL.indexOf( '/' )) ) {
+                pURL = pURL.substring( 0, zAt );
+            }
+            if ( -1 != (zAt = pURL.indexOf( ':' )) ) {
+                pURL = pURL.substring( 0, zAt );
+            }
+            String[] zParts = Strings.parseChar( pURL, '.' );
+            if ( zParts.length == 4 ) {
+                return zParts[2] + '.' + zParts[3];
+            }
+        }
+        return "???";
     }
 
     protected static abstract class AbstractInfoSourcer implements InfoSourcer {
@@ -75,7 +104,7 @@ public abstract class AbstractInfoSourcerFactory implements InfoSourcerFactory {
 
         protected AbstractInfoSourcer( Data pData ) {
             mData = pData;
-            mRandom = new Random( pData.getID() );
+            mRandom = new Random( pData.getSequenceNumber() );
         }
 
         protected String getURL() {
