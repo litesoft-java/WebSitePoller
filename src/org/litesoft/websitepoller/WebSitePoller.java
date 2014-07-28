@@ -51,7 +51,7 @@ public class WebSitePoller {
         List<InfoSourcerFactory> zFactories = Lists.newArrayList();
         String[] zLines = FileUtils.loadTextFile( new File( args[0] ) );
         for ( int i = 0; i < zLines.length; i++ ) {
-            zFactories.add( SimpleInfoSourcerFactory.from( i + 1, zLines[i] ) );
+            zFactories.add( UrlInfoSourcerFactory.from( i + 1, zLines[i] ) );
         }
         new WebSitePoller( new FrameFactory( new WidgetFactory() ), zFactories ).start();
     }

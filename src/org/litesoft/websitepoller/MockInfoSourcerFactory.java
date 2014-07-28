@@ -1,13 +1,13 @@
 package org.litesoft.websitepoller;
 
-public class SimpleInfoSourcerFactory extends AbstractInfoSourcerFactory {
+public class MockInfoSourcerFactory extends AbstractInfoSourcerFactory {
     private static final long TIME_PORTION = 1023;
 
-    public static SimpleInfoSourcerFactory from( int pID, String pConfigLine ) {
-        return new SimpleInfoSourcerFactory( new OurInfoSourcer( parse( pID, pConfigLine ) ) );
+    public static MockInfoSourcerFactory from( int pID, String pConfigLine ) {
+        return new MockInfoSourcerFactory( new OurInfoSourcer( parse( pID, pConfigLine ) ) );
     }
 
-    private SimpleInfoSourcerFactory( AbstractInfoSourcer pAbstractInfoSourcer ) {
+    private MockInfoSourcerFactory( AbstractInfoSourcer pAbstractInfoSourcer ) {
         super( pAbstractInfoSourcer );
     }
 

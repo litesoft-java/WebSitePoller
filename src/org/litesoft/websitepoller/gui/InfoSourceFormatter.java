@@ -7,7 +7,7 @@ import org.litesoft.websitepoller.support.*;
 import java.util.*;
 
 public class InfoSourceFormatter {
-    public static final int MIN_LINES = 9;
+    public static final int MIN_LINES = 10;
 
     private final AverageTracker mAverageDuration = new AverageTracker();
     private final MaxTracker mMaxDuration = new MaxTracker();
@@ -23,7 +23,7 @@ public class InfoSourceFormatter {
 
     private String htmlize( List<String> pLines ) {
         StringBuilder sb = new StringBuilder();
-        sb.append( "<html>" );
+        sb.append( "<html><br>" );
         for ( String zLine : pLines ) {
             sb.append( Strings.replace( zLine, ' ', "&nbsp;" ) ).append( "<br>" );
         }

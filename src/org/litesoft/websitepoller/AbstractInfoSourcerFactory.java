@@ -5,6 +5,7 @@ import org.litesoft.commonfoundation.csv.*;
 import org.litesoft.commonfoundation.typeutils.*;
 import org.litesoft.websitepoller.support.*;
 
+import java.io.*;
 import java.util.*;
 
 public abstract class AbstractInfoSourcerFactory implements InfoSourcerFactory {
@@ -111,7 +112,8 @@ public abstract class AbstractInfoSourcerFactory implements InfoSourcerFactory {
             return mData.getURL();
         }
 
-        abstract protected String pollForMessage();
+        abstract protected String pollForMessage()
+                throws IOException;
 
         @Override
         public void start( final SourceTarget pTarget ) {
@@ -163,12 +165,18 @@ public abstract class AbstractInfoSourcerFactory implements InfoSourcerFactory {
             }
 
             private String getNextMessage() {
+                Exception zException;
                 try {
                     return pollForMessage();
                 }
-                catch ( RuntimeException e ) {
-                    return "Error: " + e.getMessage();
+                catch ( IOException e ) {
+                    zException = e;
                 }
+                catch ( RuntimeException e ) {
+                    zException = e;
+                }
+                zException.printStackTrace();
+                return "N/A\n\nError:\n" + zException.getClass().getSimpleName();
             }
 
             @Override
