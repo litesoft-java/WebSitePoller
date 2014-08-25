@@ -3,10 +3,9 @@ main: org.litesoft.websitepoller.WebSitePoller
 
 dependencies:
 - ../LiteSoftServerUtils
+- ../LiteSoftCommonFoundation
 
 resources: 
 - LICENSE
 
-classpath:
-- ../LiteSoftServerUtils/libs|servlet*.jar
 
